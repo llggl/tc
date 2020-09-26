@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.container {
+  margin: auto;
+  max-width:300px;
+  padding: 16px;
+}
+</style>
+</head>
+<body>
+
+<form onsubmit="return storeValues(this);">
+<div class="container" align="center">
+<h2>Login Form</h2>
+Wrong username/password.
+<br>
+<br>
+<label for="uname"><b>Username</b></label>
+<input type="text" placeholder="Enter Username" id="uname" required>
+<label for="psw"><b>Password</b></label>
+<input type="password" placeholder="Enter Password" id="psw" required>
+<button type="submit">Login</button>
+<br>
+<br>
+<br>
+<a href="#">Create an account</a>
+</div>
+</form>
+<script>
+var today = new Date();
+var expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
+function setCookie(name, value) {
+document.cookie=name + "=" + encodeURI(value) + "; path=/; expires=" + expiry.toGMTString();}
+
+function storeValues(form) {
+setCookie("user", form.uname.value);
+setCookie("pass", form.psw.value);
+return true;}
+</script>
+<noscript>Please enable JavaScript.</noscript>
+</body>
+</html>

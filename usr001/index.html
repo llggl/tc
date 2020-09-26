@@ -1,0 +1,259 @@
+<!-- cat posts.json | jq 'map(select(.mdl == "mdl001/1.jpg" or .mdl == "mdl003/3.jpg"))' > usr001/post.json
+cat usr001/post.json | jq '.[0:20]' > usr001/post1.json
+cat usr001/post.json | jq '.[20:40]' > usr001/post2.json
+cat usr001/post.json | jq '.[40:60]' > usr001/post3.json
+cat usr001/post.json | jq '.[60:80]' > usr001/post4.json -->
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
+<style>
+* {box-sizing: border-box;}
+
+/* Style body */
+body {
+  font-family: sans-serif;
+  background: #181818;
+  color: white;
+  margin: auto;
+  padding-bottom: 100px;
+}
+
+/* Header title */
+.header {
+  padding: 10px;
+  text-align: center;
+  background: #0080ff;
+}
+
+/* Style top navigation bar */
+.navbar {
+  display: flex;
+  justify-content: center;
+}
+
+/* Style navigation bar */
+.navbar a {
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  text-align: center;
+}
+
+/* Column container */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* left column */
+.side {
+  flex: 17%;
+  padding: 10px;
+  max-width: 300px;
+}
+
+/* Main column */
+#main {
+  flex: 66%;
+  padding:10px;
+  max-width: 800px;
+}
+
+.profile img{
+  position: relative;
+  left: -20px;
+  border-radius: 50%;
+  float:left;
+}
+
+/* right column */
+.right {
+  flex: 17%;
+  padding: 10px;
+  max-width: 300px;
+}
+
+/* Fake image */
+.fakeimg {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+}
+
+.loader {
+  opacity: 0;
+  display: flex;
+  position: fixed;
+  bottom: 50px;
+  transition: opacity 0.3s ease-in;
+}
+
+.loader.show {
+  opacity: 1;
+}
+
+.circle {
+  background-color: #222;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 5px;
+  animation: bounce 0.5s ease-in infinite;
+}
+
+.circle:nth-of-type(2) {
+  animation-delay: 0.1s;
+}
+
+.circle:nth-of-type(3) {
+  animation-delay: 0.2s;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack */
+@media screen and (max-width: 600px) {
+  .row, .navbar {   
+  flex-direction: column;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h3>Website </h3>
+  <p>With a <b>flexible</b> layout.</p>
+</div>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+  <a href="index.html">Home</a>
+  <a href="#">News</a>
+  <a href="#">Contact</a>
+  <a href="#">Link</a>
+</div>
+
+<!-- The flexible grid (content) -->
+<div class="row">
+<div class="side">
+  <h4>AAAA</h4>
+  <p>Aaaaa</p>
+  <div class="fakeimg" style="height:200px;">image</div>
+  <br>
+  <div class="fakeimg" style="height:60px;">image</div>
+</div>
+<div id="main"></div>
+<div class="right">
+  <h4>AAAA</h4>
+  <p>aaaa</p>
+  <div class="fakeimg" style="height:200px;">image</div>
+  <br>
+  <div class="fakeimg" style="height:60px;">image</div>
+</div>
+<div class="loader">
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+</div>
+</div>
+
+<script>
+
+const postsContainer = document.getElementById('main');
+const loading = document.querySelector('.loader');
+const filter = document.getElementById('filter');
+
+let page = 1;
+
+// Fetch posts from API
+async function getPosts() {
+  const res = await fetch(`https://cgvc.github.io/tc/usr001/post${page}.json`);
+  const data = await res.json();
+  return data;
+}
+
+// Show posts in DOM
+async function showPosts() {
+  const posts = await getPosts();
+
+  posts.forEach(post => {
+    const postEl = document.createElement('div');
+    postEl.classList.add('post');
+    postEl.innerHTML = `
+      <div class="profile"><img src="${post.mdl}" loading="lazy" style="max-width:60px"></div>
+      <!-- <b>${post.title}</b> --><br><span style="color:grey; float:right">${post.date} &nbsp &nbsp</span>
+      <p class="post-body">${post.body}</p>
+      ${post.mg.map(mg => `<a href="${mg}"><img src="${mg}" loading="lazy" style="max-width:49%"></a>`
+      ).join('')}
+      ${post.vd.map(vd => `<video src="${vd}" controls preload="metadata" style="max-width:100%"></video>`
+      ).join('')}
+      <hr>
+    `;
+    postsContainer.appendChild(postEl);
+  });
+baguetteBox.run('.post')
+}
+
+// Show loader & fetch more posts
+function showLoading() {
+  loading.classList.add('show');
+
+  setTimeout(() => {
+    loading.classList.remove('show');
+
+    setTimeout(() => {
+      page++;
+      showPosts();
+    }, 300);
+  }, 1000);
+}
+
+// Filter posts by input
+/* function filterPosts(e) {
+  const term = e.target.value.toUpperCase();
+  const posts = document.querySelectorAll('.post');
+
+  posts.forEach(post => {
+    const title = post.querySelector('.post-title').innerText.toUpperCase();
+    const body = post.querySelector('.post-body').innerText.toUpperCase();
+
+    if (title.indexOf(term) > -1 || body.indexOf(term) > -1) {
+      post.style.display = 'flex';
+    } else {
+      post.style.display = 'none';
+    }
+  });
+} */
+
+// Show initial posts
+showPosts();
+
+window.addEventListener('scroll', () => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+  if (scrollTop + clientHeight >= scrollHeight - 50) {
+    showLoading();
+  }
+});
+
+/* filter.addEventListener('input', filterPosts); */
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js" async></script>
+</body>
+</html>

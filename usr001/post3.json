@@ -1,0 +1,25 @@
+[
+  {
+    "mdl": "mdl001/1.jpg",
+    "date": "2020.12.31.23.59",
+    "title": "",
+    "body": "body7",
+    "mg": [""],
+    "vd": ["https://www.w3schools.com/html/mov_bbb.mp4","https://www.w3schools.com/html/movie.mp4"]
+  },
+  {
+    "mdl": "mdl002/2.jpg",
+    "date": "2020.12.31.23.58",
+    "title": "title8",
+    "body": "body8",
+    "mg": ["https://via.placeholder.com/2500/f0fff0.png","https://via.placeholder.com/2500/f0ff0f.png","https://via.placeholder.com/2500/ff000f.png"],
+    "vd": []
+  },
+  {
+    "mdl": "mdl002/3.jpg",
+    "date": "2020.12.31.23.58",
+    "title": "title9",
+    "mg": [],
+    "vd": ["https://www.w3schools.com/html/mov_bbb.mp4"]
+  }
+]
