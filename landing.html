@@ -6,24 +6,35 @@
 <style>
 body {font-family: sans-serif;}
 
-.flex-container {
+#flex-container {
   display: flex;
   flex-wrap: wrap;
   background-color: DodgerBlue;
 }
 
-.flex-container > div {
+#flex-container > div {
   background-color: #f1f1f1;
   width: 150px;
   height: 150px;
-  margin: 6px;
+  margin: 4px;
   text-align: center;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .modal-button{
   width: 90%;
-  height: 27%;
+  height: 20%;
+}
+
+#myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
 }
 
 /* The Modal (background) */
@@ -95,19 +106,21 @@ body {font-family: sans-serif;}
   <a href="#">Link</a>
 </div>
 
-<div class="flex-container">
-  <div>1</div>
-<div><img src="https://raw.githubusercontent.com/llggl/tc/master/usr001/mdl001/1.jpg" loading="lazy" style="max-width:70%"><button class="modal-button" href="#myModal1">ModalOpenModal</button></div>
-<div><button class="modal-button" href="#myModal2">Open Modal</button></div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>  
-  <div>7</div>
-  <div>8</div>
-  <div>9</div>  
-  <div>10</div>
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+
+<div id="flex-container">
+  <div><a>Cindy</a></div>
+  <div><a>Bob</a></div>
+  <div><img src="https://raw.githubusercontent.com/llggl/tc/master/usr001/mdl001/1.jpg" loading="lazy" style="max-width:65%"><br><a>howto</a><button class="modal-button" href="#myModal1">ModalOpenModal</button></div>
+  <div><a>tryit</a><button class="modal-button" href="#myModal2">Open Modal</button></div>
+  <div><a>Billy</a></div>
+  <div><a>Agnes</a></div>  
+  <div><a>Calvin</a></div>
+  <div><a>Some text</a></div>
+  <div><a>9</a></div>  
+  <div><a>10</a></div>
   <div>11</div>
-  <div>12</div>  
+  <div>12</div>
 </div>
 
 <p>Try resizing the browser window.</p>
@@ -172,6 +185,25 @@ body {font-family: sans-serif;}
 </div>
 
 <script>
+
+function myFunction() {
+    var input, filter, fl, div, a, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    fl = document.getElementById("flex-container");
+    div = fl.getElementsByTagName("div");
+    for (i = 0; i < div.length; i++) {
+        a = div[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            div[i].style.display = "";
+        } else {
+            div[i].style.display = "none";
+        }
+    }
+}
+
+
 // Get the button that opens the modal
 var btn = document.querySelectorAll("button.modal-button");
 
